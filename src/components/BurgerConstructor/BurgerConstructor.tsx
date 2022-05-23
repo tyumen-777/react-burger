@@ -13,24 +13,36 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
   return (
     <div className={styles.wrapper}>
       <div className="ml-4 mt-4">
-        <ConstructorElement text="Краторная булка N-200i (верх)" thumbnail={data[0].image} price={20} type="top" />
+        <ConstructorElement
+          text="Краторная булка N-200i (верх)"
+          thumbnail={data[0].image}
+          price={20}
+          type="top"
+          isLocked
+        />
       </div>
       <ul className={styles.ingredients_list}>
         {data.map(i => {
-          return (
-            i.type === 'bun' && (
-              <div className={styles.ingredient} key={i._id}>
-                <DragIcon type="primary" />
-                <li>
-                  <ConstructorElement text={i.name} thumbnail={i.image} price={i.price} />
-                </li>
-              </div>
-            )
+          return i.type === 'bun' ? (
+            ''
+          ) : (
+            <div className={styles.ingredients} key={i._id}>
+              <DragIcon type="primary" />
+              <li className={styles.ingredient}>
+                <ConstructorElement text={i.name} thumbnail={i.image} price={i.price} />
+              </li>
+            </div>
           );
         })}
       </ul>
       <div className="ml-4">
-        <ConstructorElement text="Краторная булка N-200i (верх)" thumbnail={data[0].image} price={20} type="bottom" />
+        <ConstructorElement
+          text="Краторная булка N-200i (верх)"
+          thumbnail={data[0].image}
+          price={20}
+          type="bottom"
+          isLocked
+        />
       </div>
       <div className={`${styles.order_wrapper} mt-10`}>
         <div className={styles.price_wrapper}>

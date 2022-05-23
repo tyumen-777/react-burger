@@ -31,47 +31,20 @@ const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
       <div className={styles.ingredients}>
         <h2 className="text text_type_main-medium mt-10 mb-6">Булки</h2>
         <ul className={styles.list_ingredients}>
-          {data.map((ingredient: any) => {
-            return (
-              ingredient.type === 'bun' && (
-                <BurgerIngredient
-                  key={ingredient.id}
-                  image={ingredient.image}
-                  name={ingredient.name}
-                  price={ingredient.price}
-                />
-              )
-            );
+          {data.map((ingredient: IData) => {
+            return ingredient.type === 'bun' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
           })}
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Соусы</h2>
         <ul className={styles.list_ingredients}>
           {data.map((ingredient: any) => {
-            return (
-              ingredient.type === 'sauce' && (
-                <BurgerIngredient
-                  key={ingredient.id}
-                  image={ingredient.image}
-                  name={ingredient.name}
-                  price={ingredient.price}
-                />
-              )
-            );
+            return ingredient.type === 'sauce' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
           })}
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Начинки</h2>
         <ul className={styles.list_ingredients}>
           {data.map((ingredient: any) => {
-            return (
-              ingredient.type === 'main' && (
-                <BurgerIngredient
-                  key={ingredient.id}
-                  image={ingredient.image}
-                  name={ingredient.name}
-                  price={ingredient.price}
-                />
-              )
-            );
+            return ingredient.type === 'main' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
           })}
         </ul>
       </div>
