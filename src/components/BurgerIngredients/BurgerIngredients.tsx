@@ -37,13 +37,13 @@ const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Соусы</h2>
         <ul className={styles.list_ingredients}>
-          {data.map((ingredient: any) => {
+          {data.map(ingredient => {
             return ingredient.type === 'sauce' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
           })}
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Начинки</h2>
         <ul className={styles.list_ingredients}>
-          {data.map((ingredient: any) => {
+          {data.map(ingredient => {
             return ingredient.type === 'main' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
           })}
         </ul>
