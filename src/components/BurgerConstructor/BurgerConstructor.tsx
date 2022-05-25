@@ -6,10 +6,11 @@ import styles from './BurgerConstructor.module.css';
 //Types
 interface IBurgerConstructor {
   data: IData[];
+  openModal: () => void;
 }
 
 const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
-  const { data } = props;
+  const { data, openModal } = props;
   return (
     <div className={styles.wrapper}>
       <div className="ml-4 mt-4">
@@ -49,7 +50,7 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
           <p className="text text_type_digits-medium mr-2">610</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={openModal}>
           Оформить заказ
         </Button>
       </div>

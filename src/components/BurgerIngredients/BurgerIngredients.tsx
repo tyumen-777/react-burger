@@ -7,10 +7,11 @@ import styles from './BurgerIngredients.module.css';
 //Types
 interface IBurgerIngredients {
   data: IData[];
+  openIngredientsModal: any;
 }
 
 const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
-  const { data } = props;
+  const { data, openIngredientsModal } = props;
   const [currentTab, setCurrentTab] = useState<string>('bread');
 
   //Render
@@ -32,19 +33,31 @@ const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
         <h2 className="text text_type_main-medium mt-10 mb-6">Булки</h2>
         <ul className={styles.list_ingredients}>
           {data.map((ingredient: IData) => {
-            return ingredient.type === 'bun' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
+            return (
+              ingredient.type === 'bun' && (
+                <BurgerIngredient key={ingredient._id} data={ingredient} openIngredientModal={openIngredientsModal} />
+              )
+            );
           })}
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Соусы</h2>
         <ul className={styles.list_ingredients}>
           {data.map(ingredient => {
-            return ingredient.type === 'sauce' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
+            return (
+              ingredient.type === 'sauce' && (
+                <BurgerIngredient key={ingredient._id} data={ingredient} openIngredientModal={openIngredientsModal} />
+              )
+            );
           })}
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Начинки</h2>
         <ul className={styles.list_ingredients}>
           {data.map(ingredient => {
-            return ingredient.type === 'main' && <BurgerIngredient key={ingredient._id} data={ingredient} />;
+            return (
+              ingredient.type === 'main' && (
+                <BurgerIngredient key={ingredient._id} data={ingredient} openIngredientModal={openIngredientsModal} />
+              )
+            );
           })}
         </ul>
       </div>

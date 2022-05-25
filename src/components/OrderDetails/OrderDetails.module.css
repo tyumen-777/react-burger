@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.icon_wrapper {
+    width: 120px;
+    height: 120px;
+    background-image: url("../../images/tick.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}

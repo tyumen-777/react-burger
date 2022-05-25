@@ -6,12 +6,17 @@ import styles from './BurgerIngredient.module.css';
 //Types
 interface IBurgerIngredientProps {
   data: IData;
+  openIngredientModal: (data: IData) => void;
 }
 
-const BurgerIngredient = ({ data }: IBurgerIngredientProps): JSX.Element => {
+const BurgerIngredient = ({ data, openIngredientModal }: IBurgerIngredientProps): JSX.Element => {
+  const handleOpenModal = () => {
+    openIngredientModal(data);
+  };
+
   //Render
   return (
-    <li>
+    <li onClick={handleOpenModal}>
       <div className={styles.wrapper}>
         <img src={data.image} alt={data.name} />
         <div className={styles.price}>
