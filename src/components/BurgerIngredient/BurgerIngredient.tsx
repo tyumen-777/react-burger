@@ -9,7 +9,8 @@ interface IBurgerIngredientProps {
   openIngredientModal: (data: IData) => void;
 }
 
-const BurgerIngredient = ({ data, openIngredientModal }: IBurgerIngredientProps): JSX.Element => {
+const BurgerIngredient = (props: IBurgerIngredientProps): JSX.Element => {
+  const { data, openIngredientModal } = props;
   const handleOpenModal = () => {
     openIngredientModal(data);
   };

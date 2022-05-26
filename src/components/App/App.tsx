@@ -10,20 +10,20 @@ import OrderDetails from '../OrderDetails/OrderDetails';
 import styles from './App.module.css';
 
 function App() {
-  const [ingredients, setIngredients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [ingredients, setIngredients] = useState<[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
   const [isIngredientModalOpened, setIsIngredientModalOpened] = useState<boolean>(false);
   const [ingredientDetails, setIngredientDetails] = useState<IData>();
 
-  const getIngredients = async () => {
-    try {
-      const res = await fetch(BASE_URL);
+  const getIngredients = async (): Promise<void> => {
+    const res = await fetch(BASE_URL);
+    if (res.ok) {
       const data = await res.json();
       setIngredients(data.data);
       setIsLoading(true);
-    } catch (e) {
-      console.log(e);
+    } else {
+      console.log(res.status);
     }
   };
 
@@ -38,7 +38,7 @@ function App() {
   const closeOrderModal = (): void => {
     setIsOrderModalOpened(false);
   };
-  const openIngredientModal = (ingredientDetails: any): void => {
+  const openIngredientModal = (ingredientDetails: IData): void => {
     setIngredientDetails(ingredientDetails);
     setIsIngredientModalOpened(true);
   };
