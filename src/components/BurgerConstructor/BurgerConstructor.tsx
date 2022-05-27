@@ -17,7 +17,13 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
   return (
     <div className={styles.wrapper}>
       <div className="ml-4 mt-4">
-        <ConstructorElement text={bun!.name} thumbnail={data[0].image} price={20} type="top" isLocked />
+        <ConstructorElement
+          text={`${bun!.name} (верх)`}
+          thumbnail={data[0].image}
+          price={bun!.price}
+          type="top"
+          isLocked
+        />
       </div>
       <ul className={styles.ingredients_list}>
         {data.map((i, index) => {
@@ -35,9 +41,9 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
       </ul>
       <div className="ml-4">
         <ConstructorElement
-          text="Краторная булка N-200i (верх)"
+          text={`${bun!.name} (низ)`}
           thumbnail={data[0].image}
-          price={20}
+          price={bun!.price}
           type="bottom"
           isLocked
         />
