@@ -1,32 +1,36 @@
+import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import React from 'react';
 import { IData } from '../../utils/types';
-import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 
 //Types
 interface IBurgerConstructor {
   data: IData[];
+  openModal: () => void;
 }
 
 const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
-  const { data } = props;
+  const { data, openModal } = props;
+  const bun = data.find(i => i.type === 'bun');
+
+  //Render
   return (
     <div className={styles.wrapper}>
       <div className="ml-4 mt-4">
         <ConstructorElement
-          text="Краторная булка N-200i (верх)"
+          text={`${bun!.name} (верх)`}
           thumbnail={data[0].image}
-          price={20}
+          price={bun!.price}
           type="top"
           isLocked
         />
       </div>
       <ul className={styles.ingredients_list}>
-        {data.map(i => {
+        {data.map((i, index) => {
           return i.type === 'bun' ? (
             ''
           ) : (
-            <div className={styles.ingredients} key={i._id}>
+            <div className={styles.ingredients} key={index}>
               <DragIcon type="primary" />
               <li className={styles.ingredient}>
                 <ConstructorElement text={i.name} thumbnail={i.image} price={i.price} />
@@ -37,19 +41,19 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
       </ul>
       <div className="ml-4">
         <ConstructorElement
-          text="Краторная булка N-200i (верх)"
+          text={`${bun!.name} (низ)`}
           thumbnail={data[0].image}
-          price={20}
+          price={bun!.price}
           type="bottom"
           isLocked
         />
       </div>
       <div className={`${styles.order_wrapper} mt-10`}>
         <div className={styles.price_wrapper}>
-          <p className="text text_type_digits-medium mr-2">610</p>
+          <p className="text text_type_digits-medium mr-2">{bun && bun.price}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large">
+        <Button type="primary" size="large" onClick={openModal}>
           Оформить заказ
         </Button>
       </div>
