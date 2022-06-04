@@ -1,18 +1,19 @@
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import React, { PropsWithChildren, ReactElement, useState } from 'react';
+import React, { PropsWithChildren, ReactElement, useContext, useState } from 'react';
+import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
 import { IData } from '../../utils/types';
 import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 import styles from './BurgerIngredients.module.css';
 
 //Types
 interface IBurgerIngredients {
-  data: IData[];
   openIngredientsModal: any;
 }
 
 const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
-  const { data, openIngredientsModal } = props;
+  const { openIngredientsModal } = props;
   const [currentTab, setCurrentTab] = useState<string>('bread');
+  const data = useContext(BurgerIngredientsContext);
 
   //Render
   return (
@@ -42,7 +43,7 @@ const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Соусы</h2>
         <ul className={styles.list_ingredients}>
-          {data.map(ingredient => {
+          {data.map((ingredient: IData) => {
             return (
               ingredient.type === 'sauce' && (
                 <BurgerIngredient key={ingredient._id} data={ingredient} openIngredientModal={openIngredientsModal} />
@@ -52,7 +53,7 @@ const BurgerIngredients = (props: IBurgerIngredients): JSX.Element => {
         </ul>
         <h2 className="text text_type_main-medium mt-10 mb-6">Начинки</h2>
         <ul className={styles.list_ingredients}>
-          {data.map(ingredient => {
+          {data.map((ingredient: IData) => {
             return (
               ingredient.type === 'main' && (
                 <BurgerIngredient key={ingredient._id} data={ingredient} openIngredientModal={openIngredientsModal} />
