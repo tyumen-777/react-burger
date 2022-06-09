@@ -8,6 +8,7 @@ import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import Modal from '../Modal/Modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import styles from './App.module.css';
+import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
 
 function App() {
   const [ingredients, setIngredients] = useState<[]>([]);
@@ -15,9 +16,10 @@ function App() {
   const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
   const [isIngredientModalOpened, setIsIngredientModalOpened] = useState<boolean>(false);
   const [ingredientDetails, setIngredientDetails] = useState<IData>();
+  const [orderNumber, setOrderNumber] = useState<number>(0);
 
   const getIngredients = async (): Promise<void> => {
-    const res = await fetch(BASE_URL);
+    const res = await fetch(`${BASE_URL}/ingredients`);
     if (res.ok) {
       const data = await res.json();
       setIngredients(data.data);
@@ -50,23 +52,25 @@ function App() {
   return (
     <>
       <AppHeader />
-      <div className={`${styles.wrapper} pt-10 pl-5 pr-5 pb-10`}>
-        {isLoading ? (
-          <>
-            <BurgerIngredients data={ingredients} openIngredientsModal={openIngredientModal} />
-            <BurgerConstructor data={ingredients} openModal={openOrderModal} />
-          </>
-        ) : (
-          <div>Loading.....</div>
-        )}
-      </div>
+      <BurgerIngredientsContext.Provider value={ingredients}>
+        <div className={`${styles.wrapper} pt-10 pl-5 pr-5 pb-10`}>
+          {isLoading ? (
+            <>
+              <BurgerIngredients openIngredientsModal={openIngredientModal} />
+              <BurgerConstructor openModal={openOrderModal} setOrderNumber={setOrderNumber} />
+            </>
+          ) : (
+            <div>Loading.....</div>
+          )}
+        </div>
+      </BurgerIngredientsContext.Provider>
       {ingredientDetails && (
         <Modal openModal={isIngredientModalOpened} closeModal={closeIngredientModal} title="Детали ингредиента">
           <IngredientDetails ingredientDetails={ingredientDetails} />
         </Modal>
       )}
       <Modal openModal={isOrderModalOpened} closeModal={closeOrderModal}>
-        <OrderDetails />
+        <OrderDetails orderNumber={orderNumber} />
       </Modal>
     </>
   );

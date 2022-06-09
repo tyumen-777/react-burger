@@ -1,17 +1,70 @@
 import { Button, ConstructorElement, CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import React from 'react';
-import { IData } from '../../utils/types';
+import React, { Dispatch, SetStateAction, useContext, useEffect, useReducer } from 'react';
+import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
+import { BASE_URL } from '../../utils/constants';
 import styles from './BurgerConstructor.module.css';
 
 //Types
-interface IBurgerConstructor {
-  data: IData[];
+interface BurgerConstructorProps {
   openModal: () => void;
+  setOrderNumber: Dispatch<SetStateAction<number>>;
 }
 
-const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
-  const { data, openModal } = props;
+interface State {
+  count: number;
+}
+
+interface Action {
+  type: string;
+  payload: number;
+}
+
+const BurgerConstructor = (props: BurgerConstructorProps): JSX.Element => {
+  const { openModal, setOrderNumber } = props;
+  const data = useContext(BurgerIngredientsContext);
   const bun = data.find(i => i.type === 'bun');
+  const totalPriceInitialState = { totalPrice: 0 };
+
+  // console.log(JSON.stringify(data.map(i => i._id)));
+
+  // @ts-ignore
+  const [totalPriceState, totalPriceDispatcher] = useReducer(reducer, totalPriceInitialState, undefined);
+
+  function reducer(state: State, action: Action) {
+    switch (action.type) {
+      case 'count':
+        return { totalPrice: data.reduce((acc, curr) => acc + curr.price, 0) };
+      default:
+        throw new Error('Something goes wrong');
+    }
+  }
+
+  const getBunPrice = () => {
+    if (bun) {
+      return bun.price * 2;
+    } else {
+      return 0;
+    }
+  };
+
+  const handleCreateOrder = async () => {
+    const res = await fetch(`${BASE_URL}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ ingredients: data.map(i => i._id) }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setOrderNumber(data.order.number);
+    } else {
+      console.log(res.status);
+    }
+  };
+
+  useEffect(() => {
+    // @ts-ignore
+    totalPriceDispatcher({ type: 'count' });
+  }, [data]);
 
   //Render
   return (
@@ -50,10 +103,17 @@ const BurgerConstructor = (props: IBurgerConstructor): JSX.Element => {
       </div>
       <div className={`${styles.order_wrapper} mt-10`}>
         <div className={styles.price_wrapper}>
-          <p className="text text_type_digits-medium mr-2">{bun && bun.price}</p>
+          <p className="text text_type_digits-medium mr-2">{totalPriceState.totalPrice + getBunPrice()}</p>
           <CurrencyIcon type="primary" />
         </div>
-        <Button type="primary" size="large" onClick={openModal}>
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => {
+            handleCreateOrder();
+            openModal();
+          }}
+        >
           Оформить заказ
         </Button>
       </div>
