@@ -40,7 +40,7 @@ const BurgerIngredient = (props: IBurgerIngredientProps): JSX.Element => {
         </div>
         <p className={`${styles.name} text text_type_main-default`}>{ingredient.name}</p>
         {/*// @ts-ignore*/}
-        <Counter count={ingredient.count} size="default" />
+        {ingredient && ingredient.count === 0 ? '' : <Counter count={ingredient.count} size="default" />}
       </div>
     </li>
   ) : (

@@ -22,10 +22,11 @@ interface Action {
 
 const BurgerConstructor = (props: BurgerConstructorProps): JSX.Element => {
   const { openModal } = props;
-  const data = useSelector((store: any) => store.burgerIngredients.ingredients);
-  const { isBuns, constructorIngredients } = useSelector((store: any) => store.constructorOfOrder);
+  const { isBuns, constructorIngredients, bunId } = useSelector((store: any) => store.constructorOfOrder);
   const totalPriceInitialState = { totalPrice: 0 };
   const dispatch = useDispatch();
+
+  const ingredients = constructorIngredients.map((i: any) => i._id).concat(bunId);
 
   // @ts-ignore
   const [totalPriceState, totalPriceDispatcher] = useReducer(reducer, totalPriceInitialState, undefined);
@@ -59,7 +60,7 @@ const BurgerConstructor = (props: BurgerConstructorProps): JSX.Element => {
 
   const handleCreateOrder = () => {
     // @ts-ignore
-    dispatch(createOrder(data.map(i => i._id)));
+    dispatch(createOrder(ingredients));
   };
 
   useEffect(() => {
@@ -84,7 +85,7 @@ const BurgerConstructor = (props: BurgerConstructorProps): JSX.Element => {
       <ul className={styles.ingredients_list}>
         {constructorIngredients &&
           constructorIngredients.map((i: any, index: number) => {
-            return i.type === 'bun' ? '' : <ConstructorItem index={index} ingredient={i} />;
+            return i.type === 'bun' ? '' : <ConstructorItem index={index} ingredient={i} key={i.ingredientId} />;
           })}
       </ul>
       <div className="ml-4">

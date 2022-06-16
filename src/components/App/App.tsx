@@ -13,8 +13,7 @@ import styles from './App.module.css';
 
 function App() {
   const dispatch = useDispatch();
-  const ingredients = useSelector((store: any) => store.burgerIngredients.ingredients);
-  const ingredientsRequest = useSelector((store: any) => store.burgerIngredients.ingredientsRequest);
+  const { ingredients, ingredientsRequest } = useSelector((store: any) => store.burgerIngredients);
   const { isOrderModalOpened, isModalOpened } = useSelector((store: any) => store.modal);
   const { order } = useSelector((store: any) => store.order);
   const { currentIngredient } = useSelector((store: any) => store.burgerIngredient);

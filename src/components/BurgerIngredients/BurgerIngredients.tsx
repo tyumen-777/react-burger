@@ -6,7 +6,7 @@ import BurgerIngredient from '../BurgerIngredient/BurgerIngredient';
 import styles from './BurgerIngredients.module.css';
 
 const BurgerIngredients = (): JSX.Element => {
-  const [currentTab, setCurrentTab] = useState<string>('bread');
+  const [currentTab, setCurrentTab] = useState<string>('buns');
   const ingredients = useSelector((store: any) => store.burgerIngredients.ingredients);
   const constructorIngredients: [] = useSelector((store: any) => store.constructorOfOrder.constructorIngredients);
   const isBun = useSelector((store: any) => store.constructorOfOrder.isBuns);
@@ -16,9 +16,9 @@ const BurgerIngredients = (): JSX.Element => {
   const ingredientsHeader = document.getElementById('ingredients')!;
 
   //Handlers
-  const handleChangeTab = (e: any, type: any) => {
+  const handleChangeTab = (e: string) => {
     setCurrentTab(e);
-    document.getElementById(type)?.scrollIntoView();
+    document.getElementById(e)?.scrollIntoView({ behavior: 'smooth' });
   };
   const onScrollIngredient = () => {
     const bunsPos = Math.abs(buns.getBoundingClientRect().top - ingredientsHeader.getBoundingClientRect().top);
@@ -49,13 +49,13 @@ const BurgerIngredients = (): JSX.Element => {
     <div className={styles.wrapper}>
       <h1 className="text text_type_main-large">Соберите бургер</h1>
       <div className={`${styles.tabs} pt-5`}>
-        <Tab active={currentTab === 'buns'} value="buns" onClick={e => handleChangeTab(e, 'buns')}>
+        <Tab active={currentTab === 'buns'} value="buns" onClick={e => handleChangeTab(e)}>
           Булки
         </Tab>
-        <Tab active={currentTab === 'sauces'} value="sauces" onClick={e => handleChangeTab(e, 'sauces')}>
+        <Tab active={currentTab === 'sauces'} value="sauces" onClick={e => handleChangeTab(e)}>
           Соусы
         </Tab>
-        <Tab active={currentTab === 'toppings'} value="toppings" onClick={e => handleChangeTab(e, 'toppings')}>
+        <Tab active={currentTab === 'toppings'} value="toppings" onClick={e => handleChangeTab(e)}>
           Начинки
         </Tab>
       </div>

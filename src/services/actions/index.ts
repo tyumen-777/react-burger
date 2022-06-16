@@ -61,14 +61,14 @@ export const closeOrderModal = () => {
 };
 
 //User order
-export const GET_ORDER_REQUEST = 'GET_ORDER_REQUEST';
-export const GET_ORDER_SUCCESS = 'GET_ORDER_SUCCESS';
-export const GET_ORDER_FAILED = 'GET_ORDER_FAILED';
+export const SEND_ORDER_REQUEST = 'SEND_ORDER_REQUEST';
+export const SEND_ORDER_SUCCESS = 'SEND_ORDER_SUCCESS';
+export const SEND_ORDER_FAILED = 'SEND_ORDER_FAILED';
 
 export const createOrder = (ingredients: any) => {
   return async (dispatch: any) => {
     dispatch({
-      type: GET_ORDER_REQUEST,
+      type: SEND_ORDER_REQUEST,
     });
     await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
@@ -84,14 +84,14 @@ export const createOrder = (ingredients: any) => {
       })
       .then(res => {
         dispatch({
-          type: GET_ORDER_SUCCESS,
+          type: SEND_ORDER_SUCCESS,
           payload: res,
         });
       })
       .catch(err => {
         console.log(err);
         dispatch({
-          type: GET_ORDER_FAILED,
+          type: SEND_ORDER_FAILED,
         });
       });
   };

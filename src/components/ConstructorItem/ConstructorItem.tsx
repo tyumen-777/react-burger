@@ -43,9 +43,9 @@ const ConstructorItem: FC<ConstructorItemProps> = ({ index, ingredient }) => {
   const opacity = isDragging ? 0 : 1;
 
   return (
-    <div className={styles.ingredients} key={index} style={{ opacity }}>
-      <DragIcon type="primary" />
+    <div className={styles.ingredients} style={{ opacity }}>
       <li className={styles.ingredient} ref={ref}>
+        <DragIcon type="primary" />
         <ConstructorElement
           text={ingredient.name}
           thumbnail={ingredient.image}

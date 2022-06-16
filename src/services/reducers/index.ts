@@ -9,9 +9,9 @@ import {
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS,
-  GET_ORDER_FAILED,
-  GET_ORDER_REQUEST,
-  GET_ORDER_SUCCESS,
+  SEND_ORDER_FAILED,
+  SEND_ORDER_REQUEST,
+  SEND_ORDER_SUCCESS,
   GET_SELECTED_INGREDIENT_INFO,
   MOVE_CONSTRUCTOR_INGREDIENT,
   OPEN_MODAL,
@@ -106,13 +106,13 @@ const initialStateOrder = {
 
 const orderReducer = (state = initialStateOrder, action: any) => {
   switch (action.type) {
-    case GET_ORDER_REQUEST: {
+    case SEND_ORDER_REQUEST: {
       return {
         ...state,
         orderRequest: true,
       };
     }
-    case GET_ORDER_SUCCESS: {
+    case SEND_ORDER_SUCCESS: {
       return {
         ...state,
         orderRequest: false,
@@ -120,9 +120,10 @@ const orderReducer = (state = initialStateOrder, action: any) => {
         order: action.payload,
       };
     }
-    case GET_ORDER_FAILED: {
+    case SEND_ORDER_FAILED: {
       return {
         ...state,
+        order: null,
         orderFailed: true,
         orderRequest: false,
       };
@@ -138,6 +139,7 @@ const orderReducer = (state = initialStateOrder, action: any) => {
 const initialStateConstructor = {
   constructorIngredients: [],
   isBuns: null,
+  bunId: [],
 };
 
 const getConstructorIngredientReducer = (state = initialStateConstructor, action: any) => {
@@ -147,6 +149,7 @@ const getConstructorIngredientReducer = (state = initialStateConstructor, action
         return {
           ...state,
           isBuns: action.payload,
+          bunId: [action.payload._id, action.payload._id],
         };
       }
       return {
