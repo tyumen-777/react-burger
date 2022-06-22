@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { BASE_URL } from '../../utils/constants';
-import { IData } from '../../utils/types';
+import React, { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDispatch, useSelector } from 'react-redux';
+import { closeModal, closeOrderModal, getIngredients, openOrderModal } from '../../services/actions';
 import AppHeader from '../AppHeader/AppHeader';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
@@ -8,69 +10,55 @@ import IngredientDetails from '../IngredientDetails/IngredientDetails';
 import Modal from '../Modal/Modal';
 import OrderDetails from '../OrderDetails/OrderDetails';
 import styles from './App.module.css';
-import { BurgerIngredientsContext } from '../../contexts/BurgerIngredientsContext';
 
 function App() {
-  const [ingredients, setIngredients] = useState<[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isOrderModalOpened, setIsOrderModalOpened] = useState<boolean>(false);
-  const [isIngredientModalOpened, setIsIngredientModalOpened] = useState<boolean>(false);
-  const [ingredientDetails, setIngredientDetails] = useState<IData>();
-  const [orderNumber, setOrderNumber] = useState<number>(0);
-
-  const getIngredients = async (): Promise<void> => {
-    const res = await fetch(`${BASE_URL}/ingredients`);
-    if (res.ok) {
-      const data = await res.json();
-      setIngredients(data.data);
-      setIsLoading(true);
-    } else {
-      console.log(res.status);
-    }
-  };
+  const dispatch = useDispatch();
+  const { ingredients, ingredientsRequest } = useSelector((store: any) => store.burgerIngredients);
+  const { isOrderModalOpened, isModalOpened } = useSelector((store: any) => store.modal);
+  const { order } = useSelector((store: any) => store.order);
+  const { currentIngredient } = useSelector((store: any) => store.burgerIngredient);
 
   useEffect(() => {
-    getIngredients();
-  }, []);
+    // @ts-ignore
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   //Handlers
-  const openOrderModal = (): void => {
-    setIsOrderModalOpened(true);
+  const openModalOrder = (): void => {
+    dispatch(openOrderModal());
   };
-  const closeOrderModal = (): void => {
-    setIsOrderModalOpened(false);
-  };
-  const openIngredientModal = (ingredientDetails: IData): void => {
-    setIngredientDetails(ingredientDetails);
-    setIsIngredientModalOpened(true);
+  const closeModalOrder = (): void => {
+    dispatch(closeOrderModal());
   };
   const closeIngredientModal = (): void => {
-    setIsIngredientModalOpened(false);
+    dispatch(closeModal());
   };
+
+  if (!ingredients.length) return null;
 
   //Render
   return (
     <>
       <AppHeader />
-      <BurgerIngredientsContext.Provider value={ingredients}>
-        <div className={`${styles.wrapper} pt-10 pl-5 pr-5 pb-10`}>
-          {isLoading ? (
-            <>
-              <BurgerIngredients openIngredientsModal={openIngredientModal} />
-              <BurgerConstructor openModal={openOrderModal} setOrderNumber={setOrderNumber} />
-            </>
+      <div className={`${styles.wrapper} pt-10 pl-5 pr-5 pb-10`}>
+        <DndProvider backend={HTML5Backend}>
+          {ingredientsRequest ? (
+            <div>Loading...</div>
           ) : (
-            <div>Loading.....</div>
+            <>
+              <BurgerIngredients />
+              <BurgerConstructor openModal={openModalOrder} />
+            </>
           )}
-        </div>
-      </BurgerIngredientsContext.Provider>
-      {ingredientDetails && (
-        <Modal openModal={isIngredientModalOpened} closeModal={closeIngredientModal} title="Детали ингредиента">
-          <IngredientDetails ingredientDetails={ingredientDetails} />
+        </DndProvider>
+      </div>
+      {currentIngredient && (
+        <Modal openModal={isModalOpened} closeModal={closeIngredientModal} title="Детали ингредиента">
+          <IngredientDetails />
         </Modal>
       )}
-      <Modal openModal={isOrderModalOpened} closeModal={closeOrderModal}>
-        <OrderDetails orderNumber={orderNumber} />
+      <Modal openModal={isOrderModalOpened} closeModal={closeModalOrder}>
+        <OrderDetails orderNumber={order?.order.number} />
       </Modal>
     </>
   );

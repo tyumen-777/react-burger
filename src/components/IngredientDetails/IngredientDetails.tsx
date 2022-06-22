@@ -1,13 +1,10 @@
 import React from 'react';
-import { IData } from '../../utils/types';
+import { useSelector } from 'react-redux';
 import styles from './IngredientDetails.module.css';
 
-interface IIngredientDetails {
-  ingredientDetails: IData;
-}
-
-const IngredientDetails = ({ ingredientDetails }: IIngredientDetails): JSX.Element => {
-  const { image_large, name, calories, proteins, fat, carbohydrates } = ingredientDetails;
+const IngredientDetails = (): JSX.Element => {
+  const { currentIngredient } = useSelector((store: any) => store.burgerIngredient);
+  const { image_large, name, calories, proteins, fat, carbohydrates } = currentIngredient;
 
   return (
     <div className={styles.wrapper}>
